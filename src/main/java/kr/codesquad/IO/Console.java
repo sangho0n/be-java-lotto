@@ -19,11 +19,6 @@ public class Console {
 
     private consoleMemory LOG = new consoleMemory();
 
-    public void printCashInstruction()
-    {
-        System.out.println("구입 금액을 입력하세요");
-    }
-
     public int scanCashAmount()
     {
         int cash = 0;
@@ -36,7 +31,7 @@ public class Console {
             System.out.println("입력값이 숫자가 아니거나, 범위를 벗어납니다.");
             System.out.printf("범위 안에 들어가는 숫자를 입력하세요 : %d ~ %d\n", 1000, Integer.MAX_VALUE - (Integer.MAX_VALUE%1000));
         }
-
+        printCashInstruction();
         cash = scanCashAmount();
         return cash;
     }
@@ -53,6 +48,7 @@ public class Console {
         } catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아니거나, 구매가능개수를 초과합니다. 다시 입력하세요");
         }
+        printManualTicketCountInstruction();
         count = scanManualTicketCount(userCash);
         return count;
     }
@@ -69,6 +65,7 @@ public class Console {
         } catch (NumberFormatException e) {
             System.out.println("공 번호는 숫자만 가능합니다. 다시입력하세요");
         }
+        printManualTicketInstruction();
         ticket = scanManualTicket();
         return ticket;
     }
@@ -86,6 +83,7 @@ public class Console {
         }catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아닙니다. 올바른 값을 입력하세요");
         }
+        printBonusBallInstruction();
         ret = scanBonusBall();
         return ret;
     }
@@ -104,9 +102,16 @@ public class Console {
         }catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아닙니다. 올바른 값을 입력하세요");
         }
+        printLastWinnumInstruction();
         winNumArray = scanWinNums();
         return winNumArray;
     }
+
+    public void printCashInstruction()
+    {
+        System.out.println("구입 금액을 입력하세요");
+    }
+
 
     public void printManualTicketCountInstruction()
     {
