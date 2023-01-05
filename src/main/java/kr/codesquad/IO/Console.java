@@ -12,7 +12,7 @@ import java.util.Scanner;
 public class Console {
     static Scanner scanner = new Scanner(System.in);
 
-    private enum ScanContext{ CASH, BONUS, MANUAL }
+    public enum ScanContext{ CASH, BONUS, MANUAL, MANUALBALL }
 
     private class consoleMemory
     {
@@ -30,7 +30,7 @@ public class Console {
     {
         int cash = 0;
         try {
-            cash = toInt(scanner.nextLine(), ScanContext.CASH);
+            cash = Util.toInt(scanner.nextLine(), ScanContext.CASH);
             return cash;
         }
         catch(InvalidInputException e) {
@@ -45,29 +45,13 @@ public class Console {
         return cash;
     }
 
-    private int toInt(String str, ScanContext context) throws NumberFormatException
-    {
-        int ret = Integer.parseInt(str);
-        if(context == ScanContext.CASH  && (ret <= 0 || ret % 1000 != 0))
-            throw new InvalidInputException("유효한 숫자 입력이 아닙니다. 1000원 단위의 금액을 입력하세요");
-        return ret;
-    }
 
-    private int toInt(String str, ScanContext context, int userCash) throws NumberFormatException
-    {
-        int ret = Integer.parseInt(str);
-        if(context == ScanContext.MANUAL&& (ret < 0 || ret > userCash/1000))
-            throw new InvalidInputException("음수개를 구매하거나, 구매 가능 개수를 초과하여 구매할 수 없습니다. 올바른 값으로 다시 입력하세요.");
-        if(context == ScanContext.BONUS && (ret < 1 || ret > 45))
-            throw new OutOfRangeException("로또 범위 내(1 ~ 45)에 있는 숫자를 입력하세요");
-        return ret;
-    }
 
     public int scanManualTicketCount(int userCash)
     {
         int count;
         try{
-            count = toInt(scanner.nextLine(), ScanContext.MANUAL, userCash);
+            count = Util.toInt(scanner.nextLine(), ScanContext.MANUAL, userCash);
             return count;
         }
         catch(InvalidInputException e)
@@ -83,17 +67,31 @@ public class Console {
     }
 
 
-    public String scanManualTicket()
+    public ArrayList<Integer> scanManualTicket()
     {
-        return scanner.nextLine();
+        ArrayList<Integer> ticket;
+        try
+        {
+            ticket = Util.splitTo6Integers(scanner.nextLine());
+            return ticket;
+        } catch (InvalidInputException e)
+        {
+            System.out.println(e.getMessage());
+        } catch (NumberFormatException e)
+        {
+            System.out.println("공 번호는 숫자만 가능합니다. 다시입력하세요");
+        }
+        ticket = scanManualTicket();
+        return ticket;
     }
 
     public int scanBonusBall()
     {
         int ret;
         try{
-            ret = toInt(scanner.nextLine(), ScanContext.BONUS);
-            Util.bonusValidityCheck(LOG.lastWinNum, ret);
+            ret = Util.toInt(scanner.nextLine(), ScanContext.BONUS);
+            Util.checkBonusAlreadySelected(LOG.lastWinNum, ret);
+            Util.checkBallIsInRange(ret);
             return ret;
         }catch (InvalidInputException e)
         {

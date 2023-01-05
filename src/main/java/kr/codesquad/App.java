@@ -55,7 +55,7 @@ public class App {
         ArrayList<ArrayList<Integer>> manualTickets = new ArrayList<ArrayList<Integer>>();
         for(int i = 0; i < user.getManualCount(); i++)
         {
-            ArrayList<Integer> Ticket = Util.splitTo6Integers(console.scanManualTicket());
+            ArrayList<Integer> Ticket = console.scanManualTicket();
             manualTickets.add(Ticket);
         }
         // 수동 로또 정보 저장
