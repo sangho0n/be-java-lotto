@@ -6,8 +6,8 @@ import kr.codesquad.customException.InvalidInputException;
 import kr.codesquad.customException.LottoMustHas6NumbersException;
 import kr.codesquad.customException.OutOfRangeException;
 
-import java.rmi.AlreadyBoundException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Util {
 
@@ -22,15 +22,24 @@ public class Util {
         {
             afterSplited.add(toInt(splitedNums[i], Console.ScanContext.MANUALBALL));
             checkBallIsInRange(afterSplited.get(i));
+            checkAlreadySelected(afterSplited.subList(0, i), afterSplited.get(i));
         }
         return afterSplited;
     }
-
-    public static void checkBonusAlreadySelected(String lastWinNum, int bonus)
+    public static void checkAlreadySelected(String LottoNums, int ball)
     {
-        ArrayList<Integer> splitedLastWinNum = splitTo6Integers(lastWinNum);
-        if(splitedLastWinNum.contains(bonus))
+        ArrayList<Integer> afterSplit = new ArrayList<Integer>();
+        String splitNum[] = LottoNums.split(", ");
+
+        for(int i = 0; i < splitNum.length; i++) afterSplit.add(Integer.parseInt(splitNum[i]));
+
+        if(afterSplit.contains(ball))
             throw new AlreadyHasSameNumberException("이미 같은 수의 공이 뽑혔습니다. 다른 번호를 입력하세요");
+    }
+    public static void checkAlreadySelected(List<Integer> LottoNums, int ball)
+    {
+        if(LottoNums.contains(ball))
+            throw new AlreadyHasSameNumberException("같은 수를 두개 이상 적을 수 없습니다. 다른 번호를 입력하세요");
     }
 
     public static void checkBallIsInRange(int ball)

@@ -17,6 +17,7 @@ public class Console {
     private class consoleMemory
     {
         public String lastWinNum;
+        public String currentTicket;
     }
 
     private consoleMemory LOG = new consoleMemory();
@@ -44,7 +45,6 @@ public class Console {
         cash = scanCashAmount();
         return cash;
     }
-
 
 
     public int scanManualTicketCount(int userCash)
@@ -90,7 +90,7 @@ public class Console {
         int ret;
         try{
             ret = Util.toInt(scanner.nextLine(), ScanContext.BONUS);
-            Util.checkBonusAlreadySelected(LOG.lastWinNum, ret);
+            Util.checkAlreadySelected(LOG.lastWinNum, ret);
             Util.checkBallIsInRange(ret);
             return ret;
         }catch (InvalidInputException e)
