@@ -74,7 +74,7 @@ public class App {
     private void setUpLottoMachine()
     {
         console.printLastWinnumInstruction();
-        ArrayList<Integer> winNums = Util.splitTo6Integers(console.scanWinNums());
+        ArrayList<Integer> winNums = console.scanWinNums();
         lottoMachine.setWinNums(winNums); // 로또 추첨기에 당첨 번호 넘기기
         console.printBonusBallInstruction();
         int bonus = console.scanBonusBall();

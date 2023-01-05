@@ -1,9 +1,7 @@
 package kr.codesquad.IO;
 import kr.codesquad.Lotto.LottoStatus;
 import kr.codesquad.User;
-import kr.codesquad.customException.AlreadyHasSameNumberException;
 import kr.codesquad.customException.InvalidInputException;
-import kr.codesquad.customException.OutOfRangeException;
 import kr.codesquad.utility.Util;
 
 import java.util.ArrayList;
@@ -33,11 +31,9 @@ public class Console {
         try {
             cash = Util.toInt(scanner.nextLine(), ScanContext.CASH);
             return cash;
-        }
-        catch(InvalidInputException e) {
+        } catch(InvalidInputException e) {
             System.out.println(e.getMessage());
-        }
-        catch(NumberFormatException e) {
+        } catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아니거나, 범위를 벗어납니다.");
             System.out.printf("범위 안에 들어가는 숫자를 입력하세요 : %d ~ %d\n", 1000, Integer.MAX_VALUE - (Integer.MAX_VALUE%1000));
         }
@@ -53,13 +49,9 @@ public class Console {
         try{
             count = Util.toInt(scanner.nextLine(), ScanContext.MANUAL, userCash);
             return count;
-        }
-        catch(InvalidInputException e)
-        {
+        } catch(InvalidInputException e) {
             System.out.println(e.getMessage());
-        }
-        catch(NumberFormatException e)
-        {
+        } catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아니거나, 구매가능개수를 초과합니다. 다시 입력하세요");
         }
         count = scanManualTicketCount(userCash);
@@ -70,15 +62,12 @@ public class Console {
     public ArrayList<Integer> scanManualTicket()
     {
         ArrayList<Integer> ticket;
-        try
-        {
+        try {
             ticket = Util.splitTo6Integers(scanner.nextLine());
             return ticket;
-        } catch (InvalidInputException e)
-        {
+        } catch (InvalidInputException e) {
             System.out.println(e.getMessage());
-        } catch (NumberFormatException e)
-        {
+        } catch (NumberFormatException e) {
             System.out.println("공 번호는 숫자만 가능합니다. 다시입력하세요");
         }
         ticket = scanManualTicket();
@@ -93,22 +82,31 @@ public class Console {
             Util.checkAlreadySelected(LOG.lastWinNum, ret);
             Util.checkBallIsInRange(ret);
             return ret;
-        }catch (InvalidInputException e)
-        {
+        }catch (InvalidInputException e) {
             System.out.println(e.getMessage());
-        }catch(NumberFormatException e)
-        {
+        }catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아닙니다. 올바른 값을 입력하세요");
         }
         ret = scanBonusBall();
         return ret;
     }
 
-    public String scanWinNums()
+    public ArrayList<Integer> scanWinNums()
     {
-        String winNumStr = scanner.nextLine();
-        LOG.lastWinNum = winNumStr;
-        return winNumStr;
+        String winNumStr = new String();
+        ArrayList<Integer> winNumArray = new ArrayList<Integer>();
+        try{
+            winNumStr = scanner.nextLine();
+            LOG.lastWinNum = winNumStr;
+            winNumArray = Util.splitTo6Integers(winNumStr);
+            return winNumArray;
+        }catch (InvalidInputException e){
+            System.out.println(e.getMessage());
+        }catch(NumberFormatException e) {
+            System.out.println("입력값이 숫자가 아닙니다. 올바른 값을 입력하세요");
+        }
+        winNumArray = scanWinNums();
+        return winNumArray;
     }
 
     public void printManualTicketCountInstruction()
