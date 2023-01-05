@@ -1,14 +1,15 @@
 package kr.codesquad.IO;
 import kr.codesquad.Lotto.LottoStatus;
 import kr.codesquad.User;
-import kr.codesquad.customException.InvalidCashExeption;
+import kr.codesquad.customException.InvalidInputExeption;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.RuntimeException;
 
 public class Console {
     static Scanner scanner = new Scanner(System.in);
+
+    private enum ScanContext{ CASH, BONUS, MANUAL }
 
     public void printCashInstruction()
     {
@@ -20,32 +21,56 @@ public class Console {
         int cash = 0;
         try
         {
-            cash = toInt(scanner.nextLine());
+            cash = toInt(scanner.nextLine(), ScanContext.CASH);
+            return cash;
         }
-        catch(InvalidCashExeption e)
+        catch(InvalidInputExeption e)
         {
             System.out.println("유효한 숫자 입력이 아닙니다.");
             System.out.println("1000원 단위의 자연수로 금액을 입력하세요");
-            System.out.println("--------------------");
-            System.out.println("구입 금액을 입력하세요");
-            cash = scanCashAmount();
         }
         catch(NumberFormatException e)
         {
-            System.out.println("유효한 숫자 입력이 아닙니다.");
+            System.out.println("입력값이 숫자가 아니거나, 범위를 벗어납니다.");
             System.out.printf("범위 안에 들어가는 숫자를 입력하세요 : %d ~ %d\n", 1000, Integer.MAX_VALUE - (Integer.MAX_VALUE%1000));
-            System.out.println("--------------------");
-            System.out.println("구입 금액을 입력하세요");
-            cash = scanCashAmount();
         }
+
+        System.out.println("----구매금액 입력부터 다시 시작----");
+        System.out.println("구입 금액을 입력하세요");
+        cash = scanCashAmount();
         return cash;
     }
 
-    private int toInt(String str) throws NumberFormatException
+    private int toInt(String str, ScanContext context) throws NumberFormatException
     {
         int cash = Integer.parseInt(str);
-        if(cash <= 0 || cash % 1000 != 0) throw new InvalidCashExeption("유효하지 않은 입력");
+        if(context == ScanContext.CASH && cash <= 0 || cash % 1000 != 0)
+            throw new InvalidInputExeption("유효하지 않은 입력");
         return cash;
+    }
+
+    public int scanBonusBall()
+    {
+        int ret = Integer.parseInt(scanner.nextLine());
+        return ret;
+    }
+
+    public int scanManualTicketCount()
+    {
+        int ret = Integer.parseInt(scanner.nextLine());
+        return ret;
+    }
+
+
+    public String scanManualTicket()
+    {
+        return scanner.nextLine();
+    }
+
+
+    public String scanWinNums()
+    {
+        return scanner.nextLine();
     }
 
     public void printManualTicketCountInstruction()
@@ -53,19 +78,9 @@ public class Console {
         System.out.println("수동으로 구매할 로또 수를 입력해 주세요.");
     }
 
-    public String scanManualTicketCount()
-    {
-        return scanner.nextLine();
-    }
-
     public void printManualTicketInstruction()
     {
         System.out.println("수동으로 구매할 번호를 입력해주세요.");
-    }
-
-    public String scanManualTicket()
-    {
-        return scanner.nextLine();
     }
 
     public void printManualAndAutoCount(int m, int a)
@@ -100,20 +115,10 @@ public class Console {
         System.out.println("지난 주 당첨 번호를 입력해주세요");
     }
 
-    public String scanWinNums()
-    {
-        scanner.nextLine();
-        return scanner.nextLine();
-    }
 
     public void printBonusBallInstruction()
     {
         System.out.println("보너스 볼을 입력해주세요");
-    }
-
-    public int scanBonusBall()
-    {
-        return scanner.nextInt();
     }
 
     public void printResult(ArrayList<Integer> Result, int buyNum)
