@@ -25,9 +25,6 @@ public class User {
         return buyNum;
     }
 
-    public void setBuyNum(int buyNum) {
-        this.buyNum = buyNum;
-    }
     public int getAutoCount() {
         return autoCount;
     }

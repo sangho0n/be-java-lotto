@@ -15,7 +15,6 @@ public class Console {
     private class consoleMemory
     {
         public String lastWinNum;
-        public String currentTicket;
     }
 
     private consoleMemory LOG = new consoleMemory();
@@ -167,11 +166,6 @@ public class Console {
         {
             System.out.printf("%s, (%d)- %d개\n", stat.getStatusString(), stat.getWinningAmout(), Result.get(stat.ordinal()));
         }
-//          System.out.printf("3개 일치 (5000원)- %d개\n", Result.get(0));
-//          System.out.printf("4개 일치 (50000원)- %d개\n", Result.get(1));
-//          System.out.printf("5개 일치 (1500000원)- %d개\n", Result.get(2));
-//          System.out.printf("5개 일치, 보너스 볼 일치(30000000원)- %d개\n", Result.get(3));
-//          System.out.printf("6개 일치 (2000000000원)- %d개\n", Result.get(4));
 
         float rate = (float)(
                 LottoStatus.Fifth.getWinningAmout()*Result.get(0) +

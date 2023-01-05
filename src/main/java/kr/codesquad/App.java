@@ -2,7 +2,6 @@ package kr.codesquad;
 
 import kr.codesquad.IO.Console;
 import kr.codesquad.Lotto.LottoMachine;
-import kr.codesquad.utility.Util;
 
 import java.util.ArrayList;
 import java.util.Scanner;
