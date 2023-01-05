@@ -46,7 +46,7 @@ public class App {
     private void setManualTicketInfo()
     {
         console.printManualTicketCountInstruction();
-        int manualTicketCount = console.scanManualTicketCount();
+        int manualTicketCount = console.scanManualTicketCount(user.getCash());
         // 구매금액과 수동 개수를 바탕으로 전체 로또 개수와 자동/수동 개수 정보를 유저가 추론하게 함
         user.calculateBuyNum(manualTicketCount);
 

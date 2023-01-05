@@ -1,7 +1,7 @@
 package kr.codesquad.IO;
 import kr.codesquad.Lotto.LottoStatus;
 import kr.codesquad.User;
-import kr.codesquad.customException.InvalidInputExeption;
+import kr.codesquad.customException.InvalidInputException;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -19,43 +19,58 @@ public class Console {
     public int scanCashAmount()
     {
         int cash = 0;
-        try
-        {
+        try {
             cash = toInt(scanner.nextLine(), ScanContext.CASH);
             return cash;
         }
-        catch(InvalidInputExeption e)
-        {
-            System.out.println("유효한 숫자 입력이 아닙니다.");
-            System.out.println("1000원 단위의 자연수로 금액을 입력하세요");
+        catch(InvalidInputException e) {
+            System.out.println(e.getMessage());
         }
-        catch(NumberFormatException e)
-        {
+        catch(NumberFormatException e) {
             System.out.println("입력값이 숫자가 아니거나, 범위를 벗어납니다.");
             System.out.printf("범위 안에 들어가는 숫자를 입력하세요 : %d ~ %d\n", 1000, Integer.MAX_VALUE - (Integer.MAX_VALUE%1000));
         }
 
-        System.out.println("----구매금액 입력부터 다시 시작----");
-        System.out.println("구입 금액을 입력하세요");
         cash = scanCashAmount();
         return cash;
     }
 
     private int toInt(String str, ScanContext context) throws NumberFormatException
     {
-        int cash = Integer.parseInt(str);
-        if(context == ScanContext.CASH && cash <= 0 || cash % 1000 != 0)
-            throw new InvalidInputExeption("유효하지 않은 입력");
-        return cash;
-    }
-
-    public int scanBonusBall()
-    {
-        int ret = Integer.parseInt(scanner.nextLine());
+        int ret = Integer.parseInt(str);
+        if(context == ScanContext.CASH  && (ret <= 0 || ret % 1000 != 0))
+            throw new InvalidInputException("유효한 숫자 입력이 아닙니다. 1000원 단위의 금액을 입력하세요");
         return ret;
     }
 
-    public int scanManualTicketCount()
+    private int toInt(String str, ScanContext context, int userCash) throws NumberFormatException
+    {
+        int ret = Integer.parseInt(str);
+        if(context == ScanContext.MANUAL&& (ret < 0 || ret > userCash/1000))
+            throw new InvalidInputException("음수개를 구매하거나, 구매 가능 개수를 초과하여 구매할 수 없습니다. 올바른 값으로 다시 입력하세요.");
+        return ret;
+    }
+
+    public int scanManualTicketCount(int userCash)
+    {
+        int count;
+        try{
+            count = toInt(scanner.nextLine(), ScanContext.MANUAL, userCash);
+            return count;
+        }
+        catch(InvalidInputException e)
+        {
+            System.out.println(e.getMessage());
+        }
+        catch(NumberFormatException e)
+        {
+            System.out.println("입력값이 숫자가 아니거나, 구매가능개수를 초과합니다. 다시 입력하세요");
+        }
+        count = scanManualTicketCount(userCash);
+        return count;
+    }
+
+    public int scanBonusBall()
     {
         int ret = Integer.parseInt(scanner.nextLine());
         return ret;
