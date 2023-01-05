@@ -1,7 +1,10 @@
 package kr.codesquad.IO;
 import kr.codesquad.Lotto.LottoStatus;
 import kr.codesquad.User;
+import kr.codesquad.customException.AlreadyHasSameNumberException;
 import kr.codesquad.customException.InvalidInputException;
+import kr.codesquad.customException.OutOfRangeException;
+import kr.codesquad.utility.Util;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -10,6 +13,13 @@ public class Console {
     static Scanner scanner = new Scanner(System.in);
 
     private enum ScanContext{ CASH, BONUS, MANUAL }
+
+    private class consoleMemory
+    {
+        public String lastWinNum;
+    }
+
+    private consoleMemory LOG = new consoleMemory();
 
     public void printCashInstruction()
     {
@@ -48,6 +58,8 @@ public class Console {
         int ret = Integer.parseInt(str);
         if(context == ScanContext.MANUAL&& (ret < 0 || ret > userCash/1000))
             throw new InvalidInputException("음수개를 구매하거나, 구매 가능 개수를 초과하여 구매할 수 없습니다. 올바른 값으로 다시 입력하세요.");
+        if(context == ScanContext.BONUS && (ret < 1 || ret > 45))
+            throw new OutOfRangeException("로또 범위 내(1 ~ 45)에 있는 숫자를 입력하세요");
         return ret;
     }
 
@@ -70,22 +82,35 @@ public class Console {
         return count;
     }
 
-    public int scanBonusBall()
-    {
-        int ret = Integer.parseInt(scanner.nextLine());
-        return ret;
-    }
-
 
     public String scanManualTicket()
     {
         return scanner.nextLine();
     }
 
+    public int scanBonusBall()
+    {
+        int ret;
+        try{
+            ret = toInt(scanner.nextLine(), ScanContext.BONUS);
+            Util.bonusValidityCheck(LOG.lastWinNum, ret);
+            return ret;
+        }catch (InvalidInputException e)
+        {
+            System.out.println(e.getMessage());
+        }catch(NumberFormatException e)
+        {
+            System.out.println("입력값이 숫자가 아닙니다. 올바른 값을 입력하세요");
+        }
+        ret = scanBonusBall();
+        return ret;
+    }
 
     public String scanWinNums()
     {
-        return scanner.nextLine();
+        String winNumStr = scanner.nextLine();
+        LOG.lastWinNum = winNumStr;
+        return winNumStr;
     }
 
     public void printManualTicketCountInstruction()

@@ -2,6 +2,7 @@ package kr.codesquad;
 
 import kr.codesquad.IO.Console;
 import kr.codesquad.Lotto.LottoMachine;
+import kr.codesquad.utility.Util;
 
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -54,7 +55,7 @@ public class App {
         ArrayList<ArrayList<Integer>> manualTickets = new ArrayList<ArrayList<Integer>>();
         for(int i = 0; i < user.getManualCount(); i++)
         {
-            ArrayList<Integer> Ticket = splitTo6Integers(console.scanManualTicket());
+            ArrayList<Integer> Ticket = Util.splitTo6Integers(console.scanManualTicket());
             manualTickets.add(Ticket);
         }
         // 수동 로또 정보 저장
@@ -73,7 +74,7 @@ public class App {
     private void setUpLottoMachine()
     {
         console.printLastWinnumInstruction();
-        ArrayList<Integer> winNums = splitTo6Integers(console.scanWinNums());
+        ArrayList<Integer> winNums = Util.splitTo6Integers(console.scanWinNums());
         lottoMachine.setWinNums(winNums); // 로또 추첨기에 당첨 번호 넘기기
         console.printBonusBallInstruction();
         int bonus = console.scanBonusBall();
@@ -85,14 +86,5 @@ public class App {
         console.printResult(lottoMachine.getResult(user.getLottoTickets()), user.getBuyNum());
     }
 
-    private static ArrayList<Integer> splitTo6Integers(String beforeSplited)
-    {
-        String splitedNums[] = beforeSplited.split(", ");
-        ArrayList<Integer> afterSplited = new ArrayList<Integer>();
-        for(int i = 0; i < 6; i++)
-        {
-            afterSplited.add(Integer.parseInt(splitedNums[i]));
-        }
-        return afterSplited;
-    }
+
 }
